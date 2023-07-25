@@ -125,9 +125,10 @@ public class SPIDIntegrationUtil {
 	 */
 	public String decode(String encodedRequestMessage) throws IOException, DataFormatException {
 
-		encodedRequestMessage = URLDecoder.decode(encodedRequestMessage, "UTF-8"); // encoding string
+		String messageInUTF8 = URLDecoder.decode(encodedRequestMessage, "UTF-8");
+		// encodedRequestMessage = URLDecoder.decode(encodedRequestMessage, "UTF-8"); // encoding string
 
-		return new String(decompress(Base64.decode(encodedRequestMessage)),StandardCharsets.UTF_8);
+		return new String(decompress(Base64.decode(messageInUTF8)),StandardCharsets.UTF_8);
 	}
 
 	/**
@@ -173,13 +174,13 @@ public class SPIDIntegrationUtil {
 			log.error("printAuthnRequest :: " + e.getMessage(), e);
 			throw new IntegrationServiceException(e);
 		}
-		
+
 		try {
 			Signer.signObject(authnRequest.getSignature());
 		} catch (SignatureException e) {
 			throw new IntegrationServiceException(e);
 		}
-		
+
 		// converting to a DOM
 		StringWriter requestWriter = new StringWriter();
 		XMLHelper.writeNode(authDOM, requestWriter);

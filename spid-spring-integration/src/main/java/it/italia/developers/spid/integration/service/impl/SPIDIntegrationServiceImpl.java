@@ -55,8 +55,7 @@ public class SPIDIntegrationServiceImpl implements SPIDIntegrationService {
 	@Override
 	public AuthRequest buildAuthenticationRequest(final String entityId, final int assertionConsumerServiceIndex) throws IntegrationServiceException {
 		AuthenticationInfoExtractor authenticationInfoExtractor = new AuthenticationInfoExtractor(entityId, spidIntegrationUtil, assertionConsumerServiceIndex);
-		AuthRequest authRequest = authenticationInfoExtractor.getAuthenticationRequest();
-		return authRequest;
+		return authenticationInfoExtractor.getAuthenticationRequest();
 	}
 
 	@Override

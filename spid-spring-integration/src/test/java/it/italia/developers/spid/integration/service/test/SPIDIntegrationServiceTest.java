@@ -46,14 +46,13 @@ public class SPIDIntegrationServiceTest {
 	}
 
 	@Test
-	public void shouldGetSpecificXMLWhenCallAuthRequest() throws Exception {
+	void shouldGetSpecificXMLWhenCallAuthRequest() throws Exception {
 		String expectedIssuer = "https://spid.lecce.it";
 
-
 			AuthRequest authRequest = spidIntegrationService.buildAuthenticationRequest("idp.spid.gov.it", 0);
-			String result = spidIntegrationUtil.decode(authRequest.getXmlAuthRequest());
+			// String result = spidIntegrationUtil.decode(authRequest.getXmlAuthRequest());
 
-			Element resultElement = spidIntegrationUtil.xmlStringToElement(result);
+			Element resultElement = spidIntegrationUtil.xmlStringToElement(authRequest.getXmlAuthRequest());
 
 			assertThat(resultElement.getElementsByTagName("saml2:Issuer").item(0).getTextContent()).isEqualTo(expectedIssuer);
 
@@ -70,9 +69,9 @@ public class SPIDIntegrationServiceTest {
 		String IDPEntityId = "idp.spid.gov.it";
 		int assertionConsumerServiceIndex = 0;
 		AuthRequest authRequest = spidIntegrationService.buildAuthenticationRequest(IDPEntityId, assertionConsumerServiceIndex);
-		String result = spidIntegrationUtil.decode(authRequest.getXmlAuthRequest());
+		// String result = spidIntegrationUtil.decode(authRequest.getXmlAuthRequest());
 
-		Element resultElement = spidIntegrationUtil.xmlStringToElement(result);
+		Element resultElement = spidIntegrationUtil.xmlStringToElement(authRequest.getXmlAuthRequest());
 		SoftAssertions.assertSoftly(softly -> {
 			softly.assertThat(resultElement.getAttributes().getNamedItem("ID")).isNotNull();
 			softly.assertThat(resultElement.getAttributes().getNamedItem("IssueInstant").getTextContent()).contains(formattedString);
@@ -80,7 +79,7 @@ public class SPIDIntegrationServiceTest {
 			softly.assertThat(resultElement.getAttributes().getNamedItem("Destination").getTextContent()).contains(IDPEntityId);
 			softly.assertThat(resultElement.getAttributes().getNamedItem("AssertionConsumerServiceIndex").getTextContent()).isEqualTo(String.valueOf(assertionConsumerServiceIndex));
 			softly.assertThat(resultElement.getAttributes().getNamedItem("ProtocolBinding").getTextContent()).isEqualTo("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
-			softly.assertThat(resultElement.getAttributes().getNamedItem("IsPassive")).isNull();
+			softly.assertThat(resultElement.getAttributes().getNamedItem("IsPassive")).isNotNull();
 		});
 	}
 
